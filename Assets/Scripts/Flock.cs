@@ -14,7 +14,15 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ApplyRules();
+        if (Random.Range(0, 100) < 10)
+        {
+            speed = Random.Range(FlockManager.FM.minSpeed, FlockManager.FM.maxSpeed);
+        }
+        if (Random.Range(0, 100) < 10)
+        {
+            ApplyRules();
+        }
+
         transform.Translate(0, 0, speed * Time.deltaTime);
     }
 
@@ -53,9 +61,12 @@ public class Flock : MonoBehaviour
 
         if (groupSize > 0)
         {
-            vCenter = vCenter / groupSize;
+            vCenter = vCenter / groupSize + (FlockManager.FM.goalPos - transform.position);
             speed = gSpeed / groupSize;
-
+            if (speed > FlockManager.FM.maxSpeed)
+            {
+                speed = FlockManager.FM.maxSpeed;
+            }
             Vector3 direction = (vCenter + vAvoid) - transform.position;
             if (direction != Vector3.zero)
             {
